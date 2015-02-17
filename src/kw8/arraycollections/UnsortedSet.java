@@ -7,6 +7,7 @@ public class UnsortedSet<E> extends AbstractArrayCollection<E> implements
 		Set<E> {
 	public static final int DEFAULT_CAPACITY = 100;
 	private Object[] data;
+    private int size;
 
 	public UnsortedSet() {
 		this(DEFAULT_CAPACITY);
@@ -18,17 +19,33 @@ public class UnsortedSet<E> extends AbstractArrayCollection<E> implements
 
 	@Override
 	public boolean add(E e) {
-		throw new UnsupportedOperationException();
+        if (size >= data.length) throw new IllegalStateException();
+        if (contains(e)) return false;
+
+        data[size] = e;
+        size++;
+        return true;
+
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		throw new UnsupportedOperationException();
+        if (!contains(o) || size == 0) return false;
+
+        int index = Arrays.binarySearch(data, 0, size, o);
+
+        for (int i = index; i < size-1; i++) {
+            data[i] = data[i+1];
+        }
+
+        data[size-1] = null;
+        size--;
+        return true;
 	}
 
 	@Override
 	public boolean contains(Object o) {
-		throw new UnsupportedOperationException();
+		return Arrays.binarySearch(data, 0, size, o) >= 0;
 	}
 
 	@Override
@@ -38,7 +55,7 @@ public class UnsortedSet<E> extends AbstractArrayCollection<E> implements
 
 	@Override
 	public int size() {
-		return 0;
+		return size;
 	}
 
 	public static void main(String[] args) {
@@ -46,6 +63,9 @@ public class UnsortedSet<E> extends AbstractArrayCollection<E> implements
 		bag.add(2);
 		bag.add(2);
 		bag.add(1);
+        bag.add(3);
+        bag.add(4);
+        bag.remove(3);
 		System.out.println(Arrays.toString(bag.toArray()));
 	}
 }

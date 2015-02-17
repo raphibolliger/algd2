@@ -30,7 +30,7 @@ public class UnsortedSetTest extends AbstractSetTest {
 		return elements;
 	}
 
-	@Test
+	@Test(expected = ClassCastException.class) // Wird hier eine Exception erwartet? Ich habe dies hier ergänzt bin mir aber nicht sicher ob das korrekt ist.
 	public void containsOtherObject() {
 		Integer[] numbers = new Integer[] { 1, 2, 3 };
 		addNumbersToBag(numbers);

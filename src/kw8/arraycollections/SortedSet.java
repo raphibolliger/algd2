@@ -7,7 +7,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractArrayCol
 
 	public static final int DEFAULT_CAPACITY = 15;
 
-	private E[] data;
+	private Object[] data;
 	private int size;
 
 	public SortedSet()
@@ -17,68 +17,48 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractArrayCol
 
 	public SortedSet(int capacity)
 	{
-		data = (E[]) new Comparable[capacity];
+		data = new Object[capacity];
 	}
 
 	@Override
 	public boolean add(E e)
 	{
-		if (size >= data.length)
-		{
-			throw new IllegalStateException();
-		}
-		if (contains(e))
-		{
-			return false;
-		}
-		else
-		{
-			if (data[0] == null)
-			{
-				data[0] = e;
-				size++;
-				return true;
-			}
-			else
-			{
-				int index = 0;
-				while (data[index] != null && e.compareTo(data[index]) != -1)
-				{
-					index++;
-				}
+		if (size >= data.length) throw new IllegalStateException();
+		if (contains(e)) return false;
 
-				for (int i = size; i > index; i--)
-				{
-					data[i] = data[i-1];
-				}
-				data[index] = e;
-				size++;
-				return true;
-			}
-		}
 
+        if (data[0] == null) {
+            data[0] = e;size++;return true;
+        }
+
+        int index = 0;
+        while (data[index] != null && e.compareTo((E)data[index]) != -1) {
+            index++;
+        }
+
+        for (int i = size; i > index; i--) {
+            data[i] = data[i-1];
+        }
+
+        data[index] = e;
+        size++;
+        return true;
 	}
 
 	@Override
 	public boolean remove(Object o)
 	{
-		if (!contains(o) || size == 0)
-		{
-			return false;
-		}
+		if (!contains(o) || size == 0) return false;
 
 		int index = Arrays.binarySearch(data, 0, size, o);
 
-		for (int i = index; i < size-1; i++)
-		{
+		for (int i = index; i < size-1; i++) {
 			data[i] = data[i+1];
 		}
+
         data[size-1] = null;
-
         size--;
-
         return true;
-
 	}
 
 	@Override
@@ -88,7 +68,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractArrayCol
 	}
 
 	@Override
-	public E[] toArray()
+	public Object[] toArray()
 	{
 		return Arrays.copyOf(data, size());
 	}
