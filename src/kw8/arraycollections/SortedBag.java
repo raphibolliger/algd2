@@ -2,9 +2,9 @@ package kw8.arraycollections;
 
 import java.util.Arrays;
 
-public class SortedBag<E extends Comparable<? super E>> extends
-		AbstractArrayCollection<E> {
-	public static final int DEFAULT_CAPACITY = 100;
+public class SortedBag<E extends Comparable<? super E>> extends	AbstractArrayCollection<E> {
+
+    public static final int DEFAULT_CAPACITY = 100;
 	private Object[] data;
     private int size;
 
