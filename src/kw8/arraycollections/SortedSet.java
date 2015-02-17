@@ -69,13 +69,15 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractArrayCol
 
 		int index = Arrays.binarySearch(data, 0, size, o);
 
-		for (int i = index; i > size-1; i++)
+		for (int i = index; i < size-1; i++)
 		{
 			data[i] = data[i+1];
 		}
+        data[size-1] = null;
 
-		size--;
-		return true;
+        size--;
+
+        return true;
 
 	}
 
@@ -109,6 +111,8 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractArrayCol
 		bag.add(8);
 		bag.add(1);
 		bag.remove(4);
+        bag.remove(1);
+        bag.remove(4);
 		System.out.println(Arrays.toString(bag.toArray()));
 	}
 }
