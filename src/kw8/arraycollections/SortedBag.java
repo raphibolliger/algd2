@@ -27,7 +27,7 @@ public class SortedBag<E extends Comparable<? super E>> extends	AbstractArrayCol
         }
         else {
             int index = 0;
-            while (data[index] != null && e.compareTo((E)data[index]) != -1) {
+            while (data[index] != null && e.compareTo((E)data[index]) >= 0) {
                 index++;
             }
             for (int i = size; i > index; i--) {
@@ -45,7 +45,7 @@ public class SortedBag<E extends Comparable<? super E>> extends	AbstractArrayCol
             return false;
         }
 
-        int index = Arrays.binarySearch(data, 0, size-1, o);
+        int index = Arrays.binarySearch(data, 0, size, o);
 
         for (int i = index; i < size-1; i++) {
             data[i] = data[i+1];

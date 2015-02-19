@@ -13,8 +13,7 @@ import org.junit.Test;
  * Abstract Testclass containing test for all Bags / Sets and sorted / unsorted
  * 
  * @author Michael Henninger
- * 
- * @param <E>
+ *
  */
 public abstract class AbstractCollectionTest {
 	private static final int DEFAULT_SIZE = 10;
@@ -133,6 +132,13 @@ public abstract class AbstractCollectionTest {
 		assertTrue(bag.remove(5));
 		assertEquals(numbers.length - 1, bag.size());
 	}
+
+    @Test
+    public void removeLastElement() {
+        Integer[] numbers = new Integer[] { 1, 2, 3, 4, 5, 6, 7,8,9,10 };
+        addNumbersToBag(numbers);
+        assertTrue(bag.remove(10));
+    }
 
 	protected abstract AbstractArrayCollection<Integer> createIntegerCollection(
 			int size);

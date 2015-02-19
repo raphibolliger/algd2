@@ -19,6 +19,7 @@ public class UnsortedSet<E> extends AbstractArrayCollection<E> implements
 
 	@Override
 	public boolean add(E e) {
+        if (e == null) throw new NullPointerException();
         if (size >= data.length) throw new IllegalStateException();
         if (contains(e)) return false;
 
@@ -45,7 +46,11 @@ public class UnsortedSet<E> extends AbstractArrayCollection<E> implements
 
 	@Override
 	public boolean contains(Object o) {
-		return Arrays.binarySearch(data, 0, size, o) >= 0;
+        if (o == null) throw new NullPointerException();
+        for (int i = 0; i < size; i++) {
+            if (data[i].equals(o)) return true;
+        }
+        return false;
 	}
 
 	@Override
@@ -60,12 +65,10 @@ public class UnsortedSet<E> extends AbstractArrayCollection<E> implements
 
 	public static void main(String[] args) {
 		UnsortedSet<Integer> bag = new UnsortedSet<Integer>();
-		bag.add(2);
-		bag.add(2);
 		bag.add(1);
-        bag.add(3);
-        bag.add(4);
-        bag.remove(3);
+		bag.add(1);
+        bag.remove(1);
+        System.out.println(bag.contains(1));
 		System.out.println(Arrays.toString(bag.toArray()));
 	}
 }

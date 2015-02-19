@@ -1,6 +1,7 @@
 package kw8.arraycollections;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -30,10 +31,18 @@ public class UnsortedSetTest extends AbstractSetTest {
 		return elements;
 	}
 
-	@Test(expected = ClassCastException.class) // Wird hier eine Exception erwartet? Ich habe dies hier ergänzt bin mir aber nicht sicher ob das korrekt ist.
+	@Test
 	public void containsOtherObject() {
 		Integer[] numbers = new Integer[] { 1, 2, 3 };
 		addNumbersToBag(numbers);
 		assertFalse(bag.contains("Asdf"));
 	}
+
+    @Test
+    public void testLinearSearch(){
+        Integer[] numbers = new Integer[]{6, 10, 8, 5, 1};
+        addNumbersToBag(numbers);
+        assertTrue(bag.contains(1));
+    }
+
 }

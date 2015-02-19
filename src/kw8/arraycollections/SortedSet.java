@@ -32,7 +32,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractArrayCol
         }
 
         int index = 0;
-        while (data[index] != null && e.compareTo((E)data[index]) != -1) {
+        while (data[index] != null && e.compareTo((E)data[index]) >= 0) {
             index++;
         }
 
