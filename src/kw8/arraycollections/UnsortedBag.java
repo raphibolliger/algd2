@@ -25,6 +25,9 @@ public class UnsortedBag<E> extends AbstractArrayCollection<E> {
         return true;
 	}
 
+    // Diese funktion könnte auch anderst implementiert werden. Da der Bag nicht sortiert ist kann das letzte Element
+    // direkt an die zu löschende Position geschrieben werden, und das letzte auf null gesetzt werden. Diese Lösung ist
+    // etwas schneller.
 	@Override
 	public boolean remove(Object o) {
 
