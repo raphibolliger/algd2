@@ -1,28 +1,35 @@
 package kw9.collections.list.stack;
 
+import kw9.collections.list.linkedlist.MyLinkedList;
+
+import java.util.EmptyStackException;
+
 public class MyStack<E> implements IStack<E> {
+
+    private MyLinkedList<E> stack = new MyLinkedList<E>();
+
 	@Override
 	public E pop() {
-		// TODO implement this operation
-		throw new UnsupportedOperationException();
+        if (empty()) throw new EmptyStackException();
+		return stack.remove(0);
 	}
 
 	@Override
 	public E push(E item) {
-		// TODO implement this operation
-		throw new UnsupportedOperationException();
+		stack.add(0, item);
+        return item;
 	}
 
 	@Override
 	public E peek() {
-		// TODO implement this operation
-		throw new UnsupportedOperationException();
+        if (empty()) throw new EmptyStackException();
+		return stack.get(0);
 	}
 
 	@Override
 	public boolean empty() {
-		// TODO implement this operation
-		throw new UnsupportedOperationException();
+		boolean test = stack.size() <= 0;
+        return test;
 	}
 
 	public static void main(String[] args) {
