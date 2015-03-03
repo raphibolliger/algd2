@@ -1,7 +1,9 @@
 package kw9.collections.list.linkedlist;
 
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import kw9.collections.list.MyAbstractList;
 
@@ -15,6 +17,7 @@ public class SinglyLinkedList<E> extends MyAbstractList<E> {
     @Override
     public boolean add(E item) {
         addTail(item);
+        ++modCount;
         return true;
     }
 
@@ -24,6 +27,7 @@ public class SinglyLinkedList<E> extends MyAbstractList<E> {
             throw new IndexOutOfBoundsException("Can not access index: "
                     + index);
         }
+        ++modCount;
         if (index == 0) {
             // First position (O(1))
             addHead(item);
@@ -84,6 +88,7 @@ public class SinglyLinkedList<E> extends MyAbstractList<E> {
         } else {
             removeNextElement(before);
         }
+        --modCount;
         return true;
     }
 
@@ -92,6 +97,7 @@ public class SinglyLinkedList<E> extends MyAbstractList<E> {
         if (index < 0 || index >= size()) {
             throw new IndexOutOfBoundsException("Index out of bounds: " + index);
         }
+        --modCount;
         // Remove first element
         if (index == 0) {
             Node<E> toReturn = first;
@@ -200,19 +206,41 @@ public class SinglyLinkedList<E> extends MyAbstractList<E> {
 	}
 
 	private class MyIterator implements Iterator<E> {
+
+        private Node<E> p = null;
+        private Node<E> current = null;
+
+        private Node<E> next  = first;
+        private int iteratorModCount = modCount;
+
 		@Override
 		public boolean hasNext() {
-			throw new UnsupportedOperationException();
+            return next != null;
 		}
 
 		@Override
 		public E next() {
-			throw new UnsupportedOperationException();
+            if (iteratorModCount != modCount) throw new ConcurrentModificationException();
+            if (!hasNext()) throw new NoSuchElementException();
+
+            E element = next.item;
+
+            if (p != null) p = current;
+            if (current == null) current = next;
+
+            next = next.next;
+
+            return element;
 		}
 
 		@Override
 		public void remove() {
-			throw new UnsupportedOperationException();
+            if (iteratorModCount != modCount) throw new ConcurrentModificationException();
+			if (!hasNext()) throw new NoSuchElementException();
+            if (p == null) throw new IllegalStateException();
+            SinglyLinkedList.this.remove(current);
+            p.next = next;
+            --iteratorModCount;
 		}
 	}
 
