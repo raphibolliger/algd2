@@ -145,8 +145,7 @@ public abstract class Abstract_C_ListIterator_RemoveElement extends
 		assertRemainingElements(expected);
 	}
 	
-	private void removeElementAtPositionWithIterator(int indexToRemove,
-			Integer expectToBeRemoved) {
+	private void removeElementAtPositionWithIterator(int indexToRemove, Integer expectToBeRemoved) {
 		Iterator<Integer> it = getIterator();
 		int i = 0;
 		for (; i < indexToRemove; i++) {

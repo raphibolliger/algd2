@@ -72,5 +72,17 @@ public abstract class Abstract_B_ListIterator_CondurrentModification extends
 		list.remove(new Integer(3));
 		it.next();
 	}
+
+    @Test
+    public void next_IterateThroughAllElements_NoException(){
+        Integer[] expected = new Integer[]{1,2,3,4,5};
+        addNumbersFromOneToFiveToList();
+        Iterator<Integer> it = getIterator();
+        for (int i=0; i < expected.length; i++){
+            assertTrue(it.hasNext());
+            assertEquals(expected[i].intValue(), it.next().intValue());
+        }
+        assertFalse(it.hasNext());
+    }
 	
 }

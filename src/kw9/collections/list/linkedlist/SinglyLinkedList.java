@@ -88,7 +88,7 @@ public class SinglyLinkedList<E> extends MyAbstractList<E> {
         } else {
             removeNextElement(before);
         }
-        --modCount;
+        ++modCount;
         return true;
     }
 
@@ -97,7 +97,7 @@ public class SinglyLinkedList<E> extends MyAbstractList<E> {
         if (index < 0 || index >= size()) {
             throw new IndexOutOfBoundsException("Index out of bounds: " + index);
         }
-        --modCount;
+        ++modCount;
         // Remove first element
         if (index == 0) {
             Node<E> toReturn = first;
@@ -207,7 +207,10 @@ public class SinglyLinkedList<E> extends MyAbstractList<E> {
 
 	private class MyIterator implements Iterator<E> {
 
-        private Node<E> p = null;
+        private int pointer = 0;
+        private boolean removeLock = true;
+
+        private Node<E> prev = null;
         private Node<E> current = null;
 
         private Node<E> next  = first;
@@ -225,10 +228,14 @@ public class SinglyLinkedList<E> extends MyAbstractList<E> {
 
             E element = next.item;
 
-            if (p != null) p = current;
-            if (current == null) current = next;
+            if (prev != null && current != null && removeLock) current = next;
+            if (prev != null && current != null && !removeLock) { prev = current; current = next; }
+            if (prev == null && current != null) { prev = current; current = next; }
+            if (prev == null && current == null) current = next;
 
             next = next.next;
+            ++pointer;
+            removeLock = false;
 
             return element;
 		}
@@ -236,11 +243,13 @@ public class SinglyLinkedList<E> extends MyAbstractList<E> {
 		@Override
 		public void remove() {
             if (iteratorModCount != modCount) throw new ConcurrentModificationException();
-			if (!hasNext()) throw new NoSuchElementException();
-            if (p == null) throw new IllegalStateException();
-            SinglyLinkedList.this.remove(current);
-            p.next = next;
-            --iteratorModCount;
+			if (!hasNext()) throw new NoSuchElementException(); // nicht unbedingt Exception was wenn es der letzt ist.
+            if (removeLock) throw new IllegalStateException();
+
+            SinglyLinkedList.this.remove(pointer-1);
+            --pointer;
+            ++iteratorModCount;
+            removeLock = true;
 		}
 	}
 
@@ -249,6 +258,30 @@ public class SinglyLinkedList<E> extends MyAbstractList<E> {
 		list.add(1);
 		list.add(2);
 		list.add(3);
-		System.out.println(Arrays.toString(list.toArray()));
+        list.add(4);
+        list.add(5);
+        list.add(6);
+        list.add(7);
+
+        Iterator<Integer> iterator = list.iterator();
+
+        System.out.println(iterator.next());
+        iterator.remove();
+        System.out.println(iterator.next());
+        iterator.remove();
+        System.out.println(iterator.next());
+        iterator.remove();
+        System.out.println(iterator.next());
+        iterator.remove();
+        System.out.println(iterator.next());
+        iterator.remove();
+        System.out.println(iterator.next());
+        iterator.remove();
+        System.out.println(iterator.next());
+        iterator.remove();
+
+
+
+        System.out.println(Arrays.toString(list.toArray()));
 	}
 }
