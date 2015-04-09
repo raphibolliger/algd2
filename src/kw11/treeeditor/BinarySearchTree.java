@@ -7,8 +7,8 @@ package kw11.treeeditor;
  * @author Dominik Gruntz
  */
 class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E> {
-	private Node<K, E> root = null;
-	private int nodeCount = 0;
+    private Node<K, E> root = null;
+    private int nodeCount = 0;
 
 	/*
 	 * (non-Javadoc)
@@ -128,33 +128,72 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 	 *          the key of the item to remove.
 	 */
 	@Override
-	public void remove(K key) {}
+	public void remove(K key) {
+        root = delete(key, root);
+    }
+
+    private Node<K, E> delete(K key, Node<K, E> root)
+    {
+        if (root == null) return root;
+        else if (key.compareTo(root.key) < 0) root.left = delete(key, root.left);
+        else if (key.compareTo(root.key) > 0) root.right = delete(key, root.right);
+        else
+        {
+            // Case 1
+            if (root.left == null && root.right == null)
+            {
+                return null;
+            }
+            // Case 2
+            else if (root.left == null)
+            {
+                return root.right;
+            }
+            else if (root.right == null)
+            {
+                return root.left;
+            }
+            // Case 3
+            else
+            {
+                K minkey = findMin(root.right).key;
+                delete(minkey, root);
+                return new Node<K, E>(minkey, null, root.left, root.right);
+            }
+        }
+        return root;
+    }
+
+    private Node<K, E> findMin(Node<K, E> root)
+    {
+        if (root == null) return root;
+        if (root.left == null) return root;
+        return findMin(root.left);
+    }
+
+    private Node<K, E> findMax(Node<K, E> root)
+    {
+        if (root == null) return root;
+        if (root.right == null) return root;
+        return findMax(root);
+    }
+
 
 	@Override
 	public String toString() {
-
-        String out = "";
-
-        return getLeft(root, out);
-
+        return innerOrder(root, "");
 	}
 
-    private String getLeft(Node<K, E> node, String out) {
-        if (node.left != null)
-        {
-            if (node.right != null) out += getRight(node.right, out);
-            out += getLeft(node.left, out);
-        }
-
-        out += node.key.toString();
+    private String innerOrder(Node<K, E> node, String out)
+    {
+        if (node == null) return "";
+        out += "[";
+        out += innerOrder(node.left, "");
+        out += node.key;
+        out += innerOrder(node.right, "");
+        out += "]";
         return out;
-    }
 
-    private String getRight(Node<K ,E> node, String out) {
-        out += node.key.toString();
-        if (node.right != null)
-            out += getRight(node.right, out);
-        return out;
     }
 
 	private static class Node<K extends Comparable<? super K>, E> implements Tree.Node<K, E> {

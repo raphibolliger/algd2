@@ -14,6 +14,27 @@ class TreeEditor extends JFrame {
 	TreeEditor(Tree<Integer, ?> t) {
 		setTitle("Tree Editor (" + t.getClass().getName() + ")");
 		treeModel = t;
+
+        // initialize values its easier to debug
+        t.insert(new Integer(10),null);
+        t.insert(new Integer(5),null);
+        t.insert(new Integer(3),null);
+        t.insert(new Integer(1),null);
+
+        t.insert(new Integer(20),null);
+        t.insert(new Integer(15),null);
+        t.insert(new Integer(14),null);
+        t.insert(new Integer(16),null);
+
+        t.insert(new Integer(30),null);
+        t.insert(new Integer(25),null);
+        t.insert(new Integer(24),null);
+        t.insert(new Integer(26),null);
+
+        t.insert(new Integer(40),null);
+        t.insert(new Integer(35),null);
+        t.insert(new Integer(41),null);
+
 		treeView = new TreeComponent(treeModel);
 		getContentPane().setLayout(new BorderLayout());
 		JPanel panel = new JPanel();
