@@ -94,6 +94,7 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 	@Override
 	public void insert(K key, E element) {
 		root = insert(root, key, element);
+        calculateBalance(root);
 	}
 
 	/**
@@ -130,6 +131,7 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 	@Override
 	public void remove(K key) {
         root = delete(key, root);
+        calculateBalance(root);
     }
 
     private Node<K, E> delete(K key, Node<K, E> root)
@@ -178,9 +180,43 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
         return findMax(root);
     }
 
+    private boolean isBSTUtil(Node<K, E> root, K minValue, K maxValue)
+    {
+        if (root == null) return true;
+
+        return     root.key.compareTo(minValue) < 0
+                && root.key.compareTo(maxValue) > 0
+                && isBSTUtil(root.left, minValue, root.key)
+                && isBSTUtil(root.right, root.key, maxValue);
+    }
+
+    private void calculateBalance(Node<K, E> root)
+    {
+        if (root.left == null && root.right == null) {
+            root.setBalanceFactor(0);
+            return;
+        }
+        else if (root.left == null)
+        {
+            root.setBalanceFactor(0+height(root.right));
+            calculateBalance(root.right);
+        }
+        else if (root.right == null) {
+            root.setBalanceFactor(0-height(root.left));
+            calculateBalance(root.left);
+        }
+        else
+        {
+            root.setBalanceFactor((-1*height(root.left))+height(root.right));
+            calculateBalance(root.left);
+            calculateBalance(root.right);
+        }
+    }
+
 
 	@Override
 	public String toString() {
+        calculateBalance(root);
         return innerOrder(root, "");
 	}
 
@@ -200,6 +236,7 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 
         final K key;
 		E element;
+        int balanceFactor;
 		Node<K, E> left, right;
 
 		@SuppressWarnings("unused")
@@ -228,6 +265,17 @@ class BinarySearchTree<K extends Comparable<? super K>, E> implements Tree<K, E>
 		public K getKey() {
 			return key;
 		}
+
+        @Override
+        public Integer getBalanceFactor()
+        {
+            return balanceFactor;
+        }
+
+        public void setBalanceFactor(int factor)
+        {
+            balanceFactor = factor;
+        }
 
 		/*
 		 * (non-Javadoc)

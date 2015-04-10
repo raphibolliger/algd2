@@ -7,6 +7,8 @@ public interface Tree<K extends Comparable<? super K>, E> {
 	interface Node<K extends Comparable<? super K>, E> {
 		K getKey();
 
+        Integer getBalanceFactor();
+
 		Node<K, E> getLeft();
 
 		Node<K, E> getRight();
